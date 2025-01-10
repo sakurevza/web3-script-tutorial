@@ -1,13 +1,121 @@
-# Sample Hardhat Project
+**【课程介绍】**
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+**旺仔 Club** 联合业内资深开发者，首次推出**《Web3 科学家入门课程》**，旨在揭开“科学家”的神秘面纱，让每个人都有机会成为链上科学家。本课程聚焦 EVM 兼容的以太坊生态，同时涵盖部分 Solana 生态案例，由浅入深，带领学员从零搭建自己的链上工具包。
 
-Try running some of the following tasks:
+学习本课程后，您将不再是在钱包里“点点点”的普通玩家，而是能深入理解**钱包原理**、**智能合约**、**AMM 机制**和**链上攻防策略**的 Web3 科学家。
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.js
-```
+您将掌握开发者工具并充分发掘自动交易带来的巨大便利，经过结合具体案例，更能解锁**监听聪明钱**、**交易套利**和**批量撸毛**等高阶技能，通过实战培养独立解决问题的能力，从容应对链上新的复杂需求。
+
+无论您是对区块链感兴趣的开发者、金融套利玩家，还是希望在 Web3 浪潮中抢占先机的交易者，这套课程都将助您快速成长，真正**实现从小白到 Web3 科学家的跨越**。
+
+**【适合人群】**
+
++ **区块链爱好者**：对 Web3 世界感兴趣，希望从零学习区块链开发和链上交互的朋友。
++ **程序员/开发者**：具备一定编程基础，希望进入区块链行业，探索职业发展新方向，提升区块链开发技能的开发者。
++ **套利与撸毛玩家**：希望放大链上收益，入门监听聪明钱、交易套利和批量撸毛，却苦于没有思路无从下手和没人带的朋友。
++ **扩大社交圈**：结交一帮科学家朋友。
+
+**【讲师简介】**
+
+旺仔：加密行业七年、科学家、长期主义、专注确定性高赔率大机会、GAMEFI+DEFI+空投+套利、捕捉链上ALPHA机会、累积收益千万 @howbuybtc
+
+KIKO：计算机博士，Web3 资深开发者，曾就职于头部交易所，现全职量化交易，业余 Web3 项目投研 @Carry_
+
+**【课程性质】**
+
+技术实操课程。不是纯理论课。也不是讲投资方法的课。
+
+**Lesson 1 走进科学家的世界** 
+
+我们将搭建开发环境，了解与区块链交互的开发工具和与智能合约交互的接口，并编写简单的脚本用于代币转账。
+
+- [x] 1.1 开发环境搭建
+  + Node.js, NPM, Hardhat, Ethers.js
+  + Infura, Alchemy
+  + Sepolia faucet
+- [x] 1.2 代币转账
+  + ETH 转账
+  + ERC20 转账
+
+**Lesson 2 钱包的秘密与初识 Solidity**
+
+我们将了解助记词、私钥、公钥、地址之间的关系，并亲自部署智能合约从而帮助我们实现代币的批量转账与归集。
+
+- [x] 2.1 钱包基础
+  + BIP39 - Mnemonic 助记词
+  + BIP32 - HDWallet 派生钱包
+- [x] 2.2 代币批量转账
+  + 部署合约
+  + ETH、ERC20 批量转账
+- [x] 2.3 代币批量归集
+  + ETH、ERC20 批量归集
+
+**Lesson 3  监听链上行为**
+
+我们将从多维度监听区块链上的行为，可以基于此搭建聪明钱监控系统、抢跑 NFT freemint。
+
+- [x] 3.1 监听区块
+  + 监听地址交易
+- [x] 3.2监听合约事件
+  + Event, Log, Topic
+  + 监听 ERC20 转账
+  + 监听过滤地址 ERC20 转账
+- [x] 3.3 监听 Mempool
+  + 监听地址交易
+  + 监听 ERC20 转账
+  + 抢跑 NFT freemint
+
+
+**Lesson 4 了解 AMM 原理并获取代币实时价格**
+
+我们将以 UniswapV2 和 V3 为例了解 AMM 的原理，并从多种来源获取代币实时价格，与 Lesson 5 相结合后可以搭建套利交易系统。
+
+- [x] 4.1 AMM 原理
+- [x] 4.2 获取代币价格
+  + Fetch price from UniswapV2
+  + Fetch price from UniswapV3 using Quote
+  + Fetch price from UniswapV3 with Pool
+  + Fetch price from OKX
+
+**Lesson 5 实现自动交易**
+
+我们将继续以 UniswapV2 和 V3 为例实现代币自动交易，并利用 Hardhat & Anvil  中 impersonate 的特性在本地测试网模拟任何账户。
+
+- [x] 5.1 UniswapV3 交易
+  + 交易 ERC20
+  + 交易 ETH
+- [x] 5.2 本地测试网模拟任意账户
+  + UniswapV3 交易（使用 Hardhat & Anvil）
+  + UniswapV2 交易（使用 Hardhat）
+
+**Lesson 6 开盘与狙击**
+
+我们将扮演项目方和其对手方机器人实现代币开盘和监测开盘与狙击。
+
+- [x] 6.1 开盘
+  + UniswapV2 建池并添加流动性
+- [x] 6.2 开盘狙击
+  + UniswapV2 建池狙击，流动性监测并买进
+
+**Lesson 7 保障多个交易的原子性**
+
+我们将了解 MEV 与 Flashbots Bundle，通过贿赂出块者将多个交易打包为同一区块中的连续交易，可用于防三明治攻击、私钥泄漏后挽救资产或领取空投、开盘防狙击。
+
+- [x] 7.1 MEV 与 Flashbots Bundle
+- [x] 7.2 私钥泄露后挽救资产
+  + 打包转 gas 和 ERC20 转账交易
+- [x] 7.3 开盘防狙击
+  + 打包建池、添加流动性、拉盘交易
+
+**Lesson 8 更多案例**
+
+我们将打开科学家的思路，上手更多案例。
+
+- [x] 8.1 Solana 聪明钱监控
+- [x] 8.2 Odos 自动交易批量撸空投
+
+
+
+**【报名方法】**
+
+加科学家旺仔助理好友：kxjwz678（备注“科学家课”）
