@@ -7,6 +7,7 @@ require('dotenv').config()
 const provider = new ethers.AlchemyProvider("mainnet", process.env.ALCHEMY_MAINNET_KEY)
 
 const { abi: routerABI } = require('@uniswap/v2-periphery/build/UniswapV2Router02.json')
+// const routerABI =  require('./ABI/uniswapV2RouteContracr.json')
 
 const routerAddress = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
 const routerContract =  new ethers.Contract(routerAddress, routerABI, provider)

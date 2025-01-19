@@ -14,18 +14,22 @@
 
 #### UniswapV2
 
-$$\begin{aligned}
+$$
+\begin{aligned}
 x\cdot y &=k \\
 (x+\Delta x)\cdot(y-\Delta y)&=k \\
 \Delta y&=y-\frac{k}{x+\Delta x}
-\end{aligned}$$
+\end{aligned}
+$$
 
 ```sh
 npm install @uniswap/v2-periphery
 ```
 
 1. 从 factory 获取 token pair，再从 pair getReserves 计算 price（缺点：仅支持单路径）
-2. 从 router 直接获取 amountsOut（需要手动添加路径）
+2. 从 router 直接获取 getamountsOut（需要手动添加路径）
+
+从https://docs.uniswap.org/contracts/v2/reference/smart-contracts/v2-deployments找到对应V2Router02 Contract Address链合约，调用getamountsOut方法获取
 
 #### UniswapV3
 
@@ -38,6 +42,10 @@ npm install @uniswap/v3-periphery
 1. 从 factory 获取 token pool，再从 pool 获取 slot[0] 计算 price（缺点：仅支持单路径）
 2. 从 quoter 直接获取 amountOut（需要手动添加路径）
 
+1.https://docs.uniswap.org/contracts/v3/reference/deployments/ethereum-deployments找到对应UniswapV3Factory合约，再从合约里调用getPool方法输入token0/token1/费率，得到token pool合约；4_uniswapV3_token_price_pool.js
+
+2.https://docs.uniswap.org/contracts/v3/reference/deployments/ethereum-deployments找到对应链QuoterV2合约,通过
+
 ### CEX
 
 1. OKX
@@ -49,7 +57,7 @@ npm install @uniswap/v3-periphery
 2. Uniswap V2: https://docs.uniswap.org/contracts/v2/overview
 3. @uniswap/v2-periphery: https://www.npmjs.com/package/@uniswap/v2-periphery
 4. Uniswap V3: https://medium.com/@chaisomsri96/defi-math-uniswap-v3-concentrated-liquidity-bd87686b3ecf
-5. Uniswap V3: https://docs.uniswap.org/contracts/v3/reference
+5. Uniswap V3: https://docs.uniswap.org/contracts/v3/reference/deployments/ethereum-deployments
 6. @uniswap/v3-periphery: https://www.npmjs.com/package/@uniswap/v3-periphery
 7. OKX API: https://www.okx.com/docs-v5/en/#order-book-trading-market-data-get-ticker
 8. Binance API: https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#symbol-price-ticker

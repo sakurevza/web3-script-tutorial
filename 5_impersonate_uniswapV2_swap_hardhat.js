@@ -1,6 +1,7 @@
 const hardhat = require("hardhat")
 const provider = hardhat.ethers.provider
-const RECIPIENT = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" // vitalik.eth
+// const RECIPIENT = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" // vitalik.eth
+const RECIPIENT = "0xDFd5293D8e347dFe59E90eFd55b2956a1343963d" // binance
 
 const { abi: routerABI } = require('@uniswap/v2-periphery/build/UniswapV2Router02.json')
 // const { abi: factoryABI } = require('@uniswap/v2-core/build/IUniswapV2Factory.json')
@@ -47,18 +48,22 @@ async function main() {
     // before swap
     await logBalances()
 
-    const inputAmount = 10
-    const amountIn = hardhat.ethers.parseEther(inputAmount.toString())
+    // const inputAmount = 10
+    // const amountIn = hardhat.ethers.parseEther(inputAmount.toString())
 
-    const txWrap = await signer.sendTransaction({
-        to: WETH_ADDRESS,
-        value: amountIn
-    })
-    console.log("txWrap:", txWrap)
-    const receiptWrap = await txWrap.wait()
-    console.log("receiptWrap", receiptWrap)
+    const inputAmount = 3200
+    const amountIn = hardhat.ethers.parseUnits(inputAmount.toString(), 6);
 
-    const txApprove = await WETHContract.connect(signer).approve(routerAddress, amountIn)
+    // const txWrap = await signer.sendTransaction({
+    //     to: WETH_ADDRESS,
+    //     value: amountIn
+    // })
+    // console.log("txWrap:", txWrap)
+    // const receiptWrap = await txWrap.wait()
+    // console.log("receiptWrap", receiptWrap)
+
+    // const txApprove = await WETHContract.connect(signer).approve(routerAddress, amountIn)
+    const txApprove = await USDCContract.connect(signer).approve(routerAddress, amountIn)
     console.log("txApprove:", txApprove)
     const receiptApprove = await txApprove.wait()
     console.log("receiptApprove", receiptApprove)
@@ -66,7 +71,8 @@ async function main() {
     const txSwap = await routerContract.connect(signer).swapExactTokensForTokens(
         amountIn,
         0,
-        [WETH_ADDRESS, USDC_ADDRESS],
+        // [WETH_ADDRESS, USDC_ADDRESS],
+        [USDC_ADDRESS, WETH_ADDRESS],
         signer.address,
         Math.floor(Date.now() / 1000) + (60 * 10)
     )
