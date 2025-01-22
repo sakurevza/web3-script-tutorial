@@ -12,7 +12,7 @@ const token0 = 'WETH'
 const token_0 = 'ETH'
 const token1 = 'USDC'
 const token2 = 'USDT'
-const CEX = 'ok'
+const CEX = 'binance'
 const PRICEBASEGAP = 10;
 
 const tokenAndRouter = getTokenAndRouterInfo.getTokenAndRouter(network,token0,token1,token2)
@@ -77,7 +77,7 @@ async function logBalances() {
 function logErrorTX(name,tx) {
     let needTXlog = false 
     // if (!needTXlog) return;
-    // console.log(colors.red(name),tx)
+    console.log(colors.red(name),tx)
 
 }
 
@@ -142,7 +142,8 @@ async function main() {
     // const signer = await hardhat.ethers.getImpersonatedSigner(RECIPIENT)
     // await hardhat.network.provider.send("hardhat_impersonateAccount", [RECIPIENT])
     // const signer = await hardhat.ethers.getSigner(RECIPIENT)
-    console.log(colors.red("signer:"),RECIPIENT)
+    const signer = RECIPIENT
+    // console.log(colors.red("signer:"),RECIPIENT,signer)
     // const pairAddress = await factoryContract.getPair(WETH_ADDRESS, USDC_ADDRESS)
 
     // before swap
@@ -154,42 +155,51 @@ async function main() {
     let WETHBalance_value = hardhat.ethers.formatUnits(WETHBalance, 18);
     let USDCBalance_value = hardhat.ethers.formatUnits(USDCBalance, 6);
 
-    // //eth
+    //eth
     // const inputAmount = 1//change
     // const amountIn = hardhat.ethers.parseEther(inputAmount.toString())//change
 
-    // // const inputAmount = 3400
-    // // const amountIn = hardhat.ethers.parseUnits(inputAmount.toString(), 6);
+    const inputAmount = 2 //USDC
+    const amountIn = hardhat.ethers.parseUnits(inputAmount.toString(), 6);
 
-    // // const txApprove = await USDCContract.connect(signer).approve(routerAddress, amountIn)
-    // const txApprove = await WETHContract.connect(signer).approve(routerAddress, amountIn)//change
-    // logErrorTX("txApprove:", txApprove)
-    // const receiptApprove = await txApprove.wait()
-    // logErrorTX("receiptApprove:", receiptApprove)
-    // const txSwap = await routerContract.connect(signer).swapExactTokensForTokens(
-    //     amountIn,
-    //     0,
-    //     [WETH_ADDRESS, USDC_ADDRESS],//change
-    //     // [USDC_ADDRESS, WETH_ADDRESS],
-    //     signer.address,
-    //     Math.floor(Date.now() / 1000) + (60 * 10)
-    // )
-    // logErrorTX("txSwap::", txSwap)
-    // const receiptSwap = await txSwap.wait()
-    // logErrorTX("receiptSwap::", receiptSwap)
+    //检查授权
+    const allowance = await USDCContract.allowance(signer.address, routerAddress);
+    console.log(colors.red("allowance:"),hardhat.ethers.formatUnits(allowance, 6))
+    if (hardhat.ethers.formatUnits(allowance, 6) < inputAmount) {
+        const txApprove = await USDCContract.connect(signer).approve(routerAddress, amountIn)
+        // const txApprove = await WETHContract.connect(signer).approve(routerAddress, amountIn)//change
+        logErrorTX("txApprove:", txApprove)
+        const receiptApprove = await txApprove.wait()
+        logErrorTX("receiptApprove:", receiptApprove)        
+    }
+    // swapETHForExactTokens (0xfb3bdb41)
+    // swapExactETHForTokens (0x7ff36ab5)
+    // swapExactTokensForETH (0x18cbafe5)
+    // swapTokensForExactETH (0x4a25d94a)
+    const txSwap = await routerContract.connect(signer).swapExactTokensForTokens(
+        amountIn,
+        0,
+        // [WETH_ADDRESS, USDC_ADDRESS],//change
+        [USDC_ADDRESS, WETH_ADDRESS],
+        signer.address,
+        Math.floor(Date.now() / 1000) + (60 * 10)
+    )
+    logErrorTX("txSwap::", txSwap)
+    const receiptSwap = await txSwap.wait()
+    logErrorTX("receiptSwap::", receiptSwap)
 
-    // // after swap
-    // await logBalances();
-    // ETHBalance = await provider.getBalance(RECIPIENT)
-    // WETHBalance = await WETHContract.balanceOf(RECIPIENT)
-    // USDCBalance = await USDCContract.balanceOf(RECIPIENT)
-    // let after_ETHBalance_value = hardhat.ethers.formatEther(ETHBalance);
-    // let after_WETHBalance_value = hardhat.ethers.formatUnits(WETHBalance, 18);
-    // let after_USDCBalance_value = hardhat.ethers.formatUnits(USDCBalance, 6);
+    // after swap
+    await logBalances();
+    ETHBalance = await provider.getBalance(RECIPIENT)
+    WETHBalance = await WETHContract.balanceOf(RECIPIENT)
+    USDCBalance = await USDCContract.balanceOf(RECIPIENT)
+    let after_ETHBalance_value = hardhat.ethers.formatEther(ETHBalance);
+    let after_WETHBalance_value = hardhat.ethers.formatUnits(WETHBalance, 18);
+    let after_USDCBalance_value = hardhat.ethers.formatUnits(USDCBalance, 6);
 
-    // console.log(colors.green.bold('ETH_GAP'), after_ETHBalance_value - ETHBalance_value)
-    // console.log(colors.green.bold('WETH_GAP'), after_WETHBalance_value - WETHBalance_value)
-    // console.log(colors.green.bold('USDC_GAP'), after_USDCBalance_value - USDCBalance_value)
+    console.log(colors.green.bold('ETH_GAP'), after_ETHBalance_value - ETHBalance_value)
+    console.log(colors.green.bold('WETH_GAP'), after_WETHBalance_value - WETHBalance_value)
+    console.log(colors.green.bold('USDC_GAP'), after_USDCBalance_value - USDCBalance_value)
 }
 
 main().catch((error) => {

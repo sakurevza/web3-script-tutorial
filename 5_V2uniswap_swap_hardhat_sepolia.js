@@ -162,6 +162,10 @@ async function main() {
     logErrorTX("txApprove:", txApprove)
     const receiptApprove = await txApprove.wait()
     logErrorTX("receiptApprove:", receiptApprove)
+    // swapExactETHForTokens：用精确数量的 ETH 交换代币，但指定最小输出量。
+    // swapTokensForExactETH：用代币交换精确数量的 ETH，但指定最大输入量。    
+    // swapETHForExactTokens：用精确数量的 ETH 交换代币。
+    // swapExactTokensForETH：用精确数量的代币交换 ETH，但指定最小输出量。
     const txSwap = await routerContract.connect(signer).swapExactTokensForTokens(
         amountIn,
         0,
