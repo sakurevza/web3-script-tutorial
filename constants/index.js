@@ -112,8 +112,67 @@ let mainnet = {
     }
 }
 
+let arbitrum = {
+    "routerContract": "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24",
+    "quoterAddress":'0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6',
+    "quoterV2Address":"0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
+    "token":{
+        "USDT": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+        "USDC.e": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+        "USDC": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+        "LINK": "0xf97f4df75117a78c1a5a0dbb814af92458539fb4",
+        "wstETH": "0x0fBcbaEA96Ce0cF7Ee00A8c19c3ab6f5Dc8E1921",
+        "WBTC": "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+        "WETH": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+        "UNI": "0xfa7f8980b0f1e64a2062791cc3b0871572f1f7f0",
+        "PEPE": "0x25d887ce7a35172c62febfd67a1856f20faebb00",
+        "USDe": "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
+        "DAI": "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+        "ARB": "0x912ce59144191c1204e64559fe8253a0e49e6548",
+        "ENA": "0x58538e6a46e07434d7e7375bc268d3cb839c0133",
+        "cbBTC": "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+        "GRT": "0x9623063377ad1b27544c965ccd7342f7ea7e88c7",
+        "LDO": "0x13ad51ed4f1b7e9dc168d8a00cb3f4ddd85efa60",
+        "USD0": "0x35f1C5cB7Fb977E669fD244C567Da99d8a3a6850",
+        "PYTH": "0xE4D5c6aE46ADFAF04313081e8C0052A30b6Dd724",
+        "CRV": "0x11cdb42b0eb46d95f990bedd4695a6e3fa034978",
+        "ezETH": "0x2416092f143378750bb29b79ed961ab195cceea5",
+        "weETH": "0x35751007a407ca6feffe80b3cb397736d2cf4dbe",
+        "USDD": "0x680447595e8b7b3aa1b43beb9f6098c79ac2ab3f",
+        "APE": "0x7f9fbf9bdd3f4105c478b996b648fe6e828a1e98",
+        "COMP": "0x354a6da3fcde098f8389cad84b0182725c6c91de",
+        "FRAX": "0x17fc002b466eec40dae837fc4be5c67993ddbd6f",
+        "W": "0xb0ffa8000886e57f86dd5264b9582b2ad87b2b91",
+        "USDX": "0xf3527ef8de265eaa3716fb312c12847bfba66cef",
+        "Cake": "0x1b896893dfc86bb67Cf57767298b9073D2c1bA2c",
+        "GNO": "0xa0b862f60edef4452f25b4160f177db44deb6cf1",
+        "PENDLE": "0x0c880f6761f1af8d9aa9c466984b80dab9a8c9e8",
+        "AXL": "0x23ee2343b892b1bb63503a4fabc840e0e2c6810f",
+        "TUSD": "0x4d15a3a2286d883af0aa1b3f21367843fac63e07",
+        "frxETH": "0x178412e79c25968a32e89b11f63b33f733770c2a",
+        "tBTC": "0x6c84a8f1c29108F47a79964b5Fe888D4f4D0dE40",
+        "LPT": "0x289ba1701c2f088cf0faf8b3705246331cb8a839",
+        "LUNC": "0x1A4dA80967373fd929961e976b4b53ceeC063a15",
+        "1INCH": "0x6314c31a7a1652ce482cffe247e9cb7c3f4bb9af",
+        "ZRO": "0x6985884c4392d348587b19cb9eaaf157f13271cd",
+        "USDY": "0x35e050d3C0eC2d29D269a8EcEa763a183bDF9A9D",
+        "ETHFI": "0x7189fb5b6504bbff6a852b13b7b82a3c118fdc27",
+        "OHM": "0x6e6a3d8f1affac703b1aef1f43b8d2321be40043",
+        "ATH": "0xc87B37a581ec3257B734886d9d3a581F5A9d056c",
+        "sfrxETH": "0x95ab45875cffdba1e5f451b950bc2e42c0053f39",
+        "WOO": "0xcafcd85d8ca7ad1e1c6f82f651fa15e33aefd07b",
+        "CELO": "0x4e51ac49bc5e2d87e0ef713e9e5ab2d71ef4f336",
+        "YFI": "0x82e3a8f066a6989666b031d916c43672085b1582",
+        "SUSHI": "0xd4d42f0b6def4ce0383636770ef773390d85c61a",
+        "FXS": "0x9d2f299715d94d8a7e6f5eaa8e654e8c74a988a7",
+        "GMX": "0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a",
+        "LRC": "0x46d0ce7de6247b0a95f67b43b589b4041bae7fbe"
+    }
+}
+
 allData.base = base;
 allData.mainnet = mainnet;
+allData.arbitrum = arbitrum;
 
 let getTokenAndRouter = function(network, token0, token1, token2) {
     let infoObject = allData[network];
@@ -140,3 +199,10 @@ module.exports = {
     getTokenAndRouter: getTokenAndRouter,
     allData: allData
 }
+
+// quoterV2Address 地址https://docs.uniswap.org/contracts/v3/reference/deployments/arbitrum-deployments
+// routerContract 地址https://docs.uniswap.org/contracts/v2/reference/smart-contracts/v2-deployments
+
+
+// arb  weth-usdc getPair
+// https://arbiscan.io/address/0xF64Dfe17C8b87F012FCf50FbDA1D62bfA148366a

@@ -4,8 +4,10 @@ const provider = hardhat.ethers.provider
 
 
 const getTokenAndRouterInfo = require('./constants');
-const network = 'mainnet';
-// const network = 'base';
+// const network = 'mainnet';
+const network = 'base';
+// const network = 'arbitrum';
+
 const token0 = 'WETH'
 const token_0 = 'ETH'
 const token1 = 'USDC'
@@ -17,8 +19,10 @@ const tokenAndRouter = getTokenAndRouterInfo.getTokenAndRouter(network,token0,to
 
 
 // const RECIPIENT = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" // vitalik.eth
-const RECIPIENT = "0xDFd5293D8e347dFe59E90eFd55b2956a1343963d" // binance
-// const RECIPIENT = "0x3A54dF4CC72a4ca65E1a53E28E9912535Ff07641" // base 有weth
+// const RECIPIENT = "0xDFd5293D8e347dFe59E90eFd55b2956a1343963d" // binance
+const RECIPIENT = "0x3A54dF4CC72a4ca65E1a53E28E9912535Ff07641" // base 有weth
+// const RECIPIENT = "0xB38e8c17e38363aF6EbdCb3dAE12e0243582891D" // arb binance有weth
+
 
 const colors = require('colors');
 // console.log(colors.red('This is red text ') + colors.green.bold('and this is green bold text ') + 'this is normal text');
@@ -78,13 +82,30 @@ function logErrorTX(name,tx) {
 }
 
 async function uniV2routerGetPrice(_amountIn,tokenIn,tokenOut,option) {
-    const path = [tokenIn, tokenOut]
-    const amountsOut = await routerContract.getAmountsOut(_amountIn, path);
-    // console.log(colors.yellow('amountsOut:'),hardhat.ethers.formatUnits(amountsOut[1].toString(), 6))
+    // const path = [tokenIn, tokenOut]
+    // const amountsOut = await routerContract.getAmountsOut(_amountIn, path);
+    // // console.log(colors.yellow('amountsOut:'),hardhat.ethers.formatUnits(amountsOut[1].toString(), 6))
+    // return{
+    //     "amountOut":hardhat.ethers.formatUnits(amountsOut[1].toString(), 6)
+    // }
+    const inputAmount = 3000 //usdc
+    const amountIn = hardhat.ethers.parseUnits(inputAmount.toString(), 6);
+    const path = [tokenOut, tokenIn]
+    const _amountsOut = await routerContract.getAmountsOut(amountIn, path);
+    const amountOut = hardhat.ethers.formatUnits(_amountsOut[1].toString(), 18);
+    const exchangeRate = inputAmount / amountOut;
+
+    const inputAmountETH = 1//change
+    const amountInETH = hardhat.ethers.parseEther(inputAmountETH.toString())//change
+    const path2 = [tokenIn, tokenOut]
+    const _amountsOut2 = await routerContract.getAmountsOut(amountInETH, path2);    
+    const amountsOut2 = hardhat.ethers.formatUnits(_amountsOut2[1].toString(), 6); 
+    const exchangeRate2 = amountsOut2 / inputAmountETH;
+    console.log(colors.red('uniV2_USDC->ETH:'),exchangeRate)
+    console.log(colors.red('uniV2_ETH-USDC:'),exchangeRate2)
     return{
-        "amountOut":hardhat.ethers.formatUnits(amountsOut[1].toString(), 6)
-        // "amountOut":amountsOut[1]
-    }
+        "amountOut":exchangeRate
+    }    
 }
 
 async function getPriceCEX(cex,tick1, tick2) {
@@ -131,7 +152,7 @@ async function main() {
     //查询价格
     let isGap = await findGapPrice(WETHContract,USDCContract)
     console.log('isGap',isGap);
-    if (!isGap) return;
+    // if (!isGap) return;
 
 
     // impersonate
@@ -151,14 +172,20 @@ async function main() {
     let USDCBalance_value = hardhat.ethers.formatUnits(USDCBalance, 6);
 
     //eth
-    const inputAmount = 1//change
-    const amountIn = hardhat.ethers.parseEther(inputAmount.toString())//change
+    // const inputAmount = 1//change
+    // const amountIn = hardhat.ethers.parseEther(inputAmount.toString())//change
 
-    // const inputAmount = 3400
-    // const amountIn = hardhat.ethers.parseUnits(inputAmount.toString(), 6);
+    const inputAmount = 3000
+    const amountIn = hardhat.ethers.parseUnits(inputAmount.toString(), 6);
 
-    // const txApprove = await USDCContract.connect(signer).approve(routerAddress, amountIn)
-    const txApprove = await WETHContract.connect(signer).approve(routerAddress, amountIn)//change
+    // const txWrap = await signer.sendTransaction({
+    //     to: WETH_ADDRESS,
+    //     value: amountIn
+    // })
+    // const receiptWrap = await txWrap.wait()
+
+    const txApprove = await USDCContract.connect(signer).approve(routerAddress, amountIn)
+    // const txApprove = await WETHContract.connect(signer).approve(routerAddress, amountIn)//change
     logErrorTX("txApprove:", txApprove)
     const receiptApprove = await txApprove.wait()
     logErrorTX("receiptApprove:", receiptApprove)
@@ -169,8 +196,8 @@ async function main() {
     const txSwap = await routerContract.connect(signer).swapExactTokensForTokens(
         amountIn,
         0,
-        [WETH_ADDRESS, USDC_ADDRESS],//change
-        // [USDC_ADDRESS, WETH_ADDRESS],
+        // [WETH_ADDRESS, USDC_ADDRESS],//change
+        [USDC_ADDRESS, WETH_ADDRESS],
         signer.address,
         Math.floor(Date.now() / 1000) + (60 * 10)
     )
@@ -190,6 +217,7 @@ async function main() {
     console.log(colors.green.bold('ETH_GAP'), after_ETHBalance_value - ETHBalance_value)
     console.log(colors.green.bold('WETH_GAP'), after_WETHBalance_value - WETHBalance_value)
     console.log(colors.green.bold('USDC_GAP'), after_USDCBalance_value - USDCBalance_value)
+    console.log(colors.green.bold('exchange_rate'),  (after_USDCBalance_value - USDCBalance_value) / (after_WETHBalance_value - WETHBalance_value))
 }
 
 main().catch((error) => {

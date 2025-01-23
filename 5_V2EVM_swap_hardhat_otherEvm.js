@@ -7,7 +7,8 @@ require('dotenv').config();
 
 const getTokenAndRouterInfo = require('./constants');
 // const network = 'mainnet';
-const network = 'base';
+// const network = 'base';
+const network = 'arbitrum';
 const token0 = 'WETH'
 const token_0 = 'ETH'
 const token1 = 'USDC'
@@ -16,14 +17,14 @@ const CEX = 'binance'
 const PRICEBASEGAP = 10;
 
 const tokenAndRouter = getTokenAndRouterInfo.getTokenAndRouter(network,token0,token1,token2)
-
+console.log(tokenAndRouter)
 
 // const RECIPIENT = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" // vitalik.eth
 // const RECIPIENT = "0xDFd5293D8e347dFe59E90eFd55b2956a1343963d" // binance
 // const RECIPIENT = "0x3A54dF4CC72a4ca65E1a53E28E9912535Ff07641" // base 有weth
 
 const privateKey = process.env.PRIVATE_KEY_0
-const RECIPIENT = new hardhat.ethers.Wallet(privateKey, provider)
+const RECIPIENT = new hardhat.ethers.Wallet(privateKey, provider).address;
 
 // console.log(colors.red('This is red text ') + colors.green.bold('and this is green bold text ') + 'this is normal text');
 
@@ -133,21 +134,21 @@ async function findGapPrice(tokenIn,tokenOut,option) {
 
 async function main() {
     //查询价格
-    let isGap = await findGapPrice(WETHContract,USDCContract)
-    console.log('isGap',isGap);
-    if (!isGap) return;
+    // let isGap = await findGapPrice(WETHContract,USDCContract)
+    // console.log('isGap',isGap);
+    // if (!isGap) return;
 
 
     // impersonate
     // const signer = await hardhat.ethers.getImpersonatedSigner(RECIPIENT)
     // await hardhat.network.provider.send("hardhat_impersonateAccount", [RECIPIENT])
-    // const signer = await hardhat.ethers.getSigner(RECIPIENT)
-    const signer = RECIPIENT
-    // console.log(colors.red("signer:"),RECIPIENT,signer)
+    const signer = await hardhat.ethers.getSigner(RECIPIENT)
+    // const signer = RECIPIENT
+    console.log(colors.red("signer:"),RECIPIENT,signer)
     // const pairAddress = await factoryContract.getPair(WETH_ADDRESS, USDC_ADDRESS)
 
     // before swap
-    await logBalances()
+    // await logBalances()
     let ETHBalance = await provider.getBalance(RECIPIENT)
     let WETHBalance = await WETHContract.balanceOf(RECIPIENT)
     let USDCBalance = await USDCContract.balanceOf(RECIPIENT)
@@ -159,7 +160,7 @@ async function main() {
     // const inputAmount = 1//change
     // const amountIn = hardhat.ethers.parseEther(inputAmount.toString())//change
 
-    const inputAmount = 2 //USDC
+    const inputAmount = 10 //USDC
     const amountIn = hardhat.ethers.parseUnits(inputAmount.toString(), 6);
 
     //检查授权
