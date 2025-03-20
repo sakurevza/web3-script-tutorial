@@ -27,7 +27,7 @@ const quoterV2Address = tokenAndRouter?.quoterV2Address
 const uniV2_routerAddress = tokenAndRouter?.routerContract
 
 
-const quoterV2Contract = new ethers.Contract(quoterV2Address, IQuoterV2ABI, provider)
+const V3quoterV2Contract = new ethers.Contract(quoterV2Address, IQuoterV2ABI, provider)
 const uniV2_routerContract =  new ethers.Contract(uniV2_routerAddress, routerABI, provider)
 
 
@@ -43,7 +43,7 @@ async function quoterV2(_amountIn,tokenIn,tokenOut,option = {}){
 		amountIn: amountIn,
 		sqrtPriceLimitX96: sqrtPriceLimitX96
 	}
-	const result = await quoterV2Contract.quoteExactInputSingle.staticCall(params);
+	const result = await V3quoterV2Contract.quoteExactInputSingle.staticCall(params);
     const exchangeRate = ethers.formatUnits(result[0], 6);
 
 
@@ -56,7 +56,7 @@ async function quoterV2(_amountIn,tokenIn,tokenOut,option = {}){
 		amountIn: amountInUSDC,
 		sqrtPriceLimitX96: sqrtPriceLimitX96
 	}
-	const _result2 = await quoterV2Contract.quoteExactInputSingle.staticCall(params2);
+	const _result2 = await V3quoterV2Contract.quoteExactInputSingle.staticCall(params2);
 	const result2 = ethers.formatUnits(_result2[0], 18)
     const exchangeRate2 = inputAmount / result2;
     console.log(colors.red('quoterV2_ETH-USDC: 卖eth'),exchangeRate)
@@ -139,8 +139,11 @@ async function main() {
 	const maxIndex = tokenIn_tokenOut.reduce((maxIdx, currentValue, currentIndex) => 
 	currentValue > tokenIn_tokenOut[maxIdx] ? currentIndex : maxIdx, 0);
 	  
-	console.log(`卖最大的汇率在 ${stringIndex[maxIndex]},买最小的汇率在 ${stringIndex[minIndex]}`);
-}
+	console.log(`
+	卖最大的汇率在 ${stringIndex[maxIndex]},价格：,${tokenIn_tokenOut[maxIndex]},
+	买最小的汇率在 ${stringIndex[minIndex]+"价格："+tokenOut_tokenIn[minIndex]}
+	"价格差："${tokenIn_tokenOut[maxIndex] - tokenOut_tokenIn[minIndex]}`);
+	}
 
 
 main()
